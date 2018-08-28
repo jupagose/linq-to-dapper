@@ -37,7 +37,7 @@ _connection.Query<ModelName>(a => a.Id == 1);
 ```
 
 ### Ignore some properties
-Properties marked with [NotMapped] Attribute must be ignored in the query
+Properties marked with ```[NotMapped]``` Attribute must be ignored in the query
 
 ```C#
 public class Person
