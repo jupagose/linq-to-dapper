@@ -17,7 +17,9 @@ Include the extensions reference in your code
 using Dapper.Contrib.Linq2Dapper.Extensions
 ```
 
-Then choose your flavour; because Linq2Dapper implements `IQueryable<T>` you can use either Linq or lambda queries to achieve clean results
+Then choose your flavour; because Linq2Dapper implements `IQueryable<T>` you can use either Linq or lambda queries to achieve clean results.
+
+
 
 ```C#
 var thing = _connection.Query<ModelName>(a => a.Id == 1).Single();
@@ -34,6 +36,33 @@ _connection.Query<ModelName>("SELECT Id, Name FROM ModelName WHERE Id = @Id", ne
 _connection.Query<ModelName>(a => a.Id == 1);
 ```
 
+### Ignore some properties
+Now NotMapped properties marked with [NotMapped] Attribute must be ignored in the query
+
+```C#
+public class Person
+{	
+    public int Id {get;set;}
+    public string FirstName {get;set;}
+    public string LastName {get;set;}
+    [NotMapped]
+    public bool IsSelected {get;set;}
+}
+```
+
+Query Like this
+
+```C#
+_connection.Query<Person>(a => a.Id == 1);
+```
+
+Will produce Sql like this 
+
+```SQL
+SELECT t1.[Id], t1.[FirstName], t1.[LastName] 
+FROM [Person] t1 
+WHERE ((t1.[Id] = @ld__1)
+```
 
 ### Using a data context
 
