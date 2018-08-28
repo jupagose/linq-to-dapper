@@ -257,7 +257,10 @@ namespace Dapper.Contrib.Linq2Dapper.Helpers
 
             // get properties add to cache
             var properties = new Dictionary<string, string>();
-            type.GetProperties().ToList().ForEach(
+            type.GetProperties()
+                .Where(p => !Attribute.IsDefined(p, typeof(NotMappedAttribute)))
+                .ToList()
+                .ForEach(
                     x =>
                     {
                         var col = (ColumnAttribute)x.GetCustomAttribute(typeof(ColumnAttribute));
